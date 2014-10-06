@@ -15,7 +15,7 @@ def readheader(filename):
         header['ImageWidth'] = struct.unpack('<I',f.read(4))[0] #int32
         header['ImageHeight'] = struct.unpack('<I',f.read(4))[0] #int32
         header['PixelDepth'] = struct.unpack('<I',f.read(4))[0] #int32
-        header['BytePerPixel'] = 1 if PixelDepth<=8 else 2
+        header['BytePerPixel'] = 1 if header['PixelDepth']<=8 else 2
         header['FrameCount'] = struct.unpack('<I',f.read(4))[0] #int32
         header['Observer'] = struct.unpack('<40s',f.read(40))[0] #str
         header['Instrument'] = struct.unpack('<40s',f.read(40))[0] #str
@@ -36,13 +36,14 @@ def readframe(filename,frame,header=False):
     ImagePixels = header['ImageWidth']*header['ImageHeight']
     ImageBytes = ImagePixels*header['BytePerPixel']
     with open(filename,'rb') as f:
-        f.seek(HeaderBytes+ImageBytes*WhichFrame)
+        f.seek(HeaderBytes+ImageBytes*frame)
         f.read(ImageBytes)
         fmt = '{endian}{pixels}{fmt}'.format(
                             endian='<' if header['LittleEndian'] else '>',
                             pixels=ImagePixels,
-                            fmt='H' if BytePerPixel==2 else 'B')
-        img = np.array(struct.unpack(fmt,f.read(ImageBytes))).reshape(ImageHeight,ImageWidth)
+                            fmt='H' if header['BytePerPixel']==2 else 'B')
+        img = np.array(struct.unpack(fmt,f.read(ImageBytes))).reshape(
+                                    header['ImageHeight'],header['ImageWidth'])
 
     return img, header
 
