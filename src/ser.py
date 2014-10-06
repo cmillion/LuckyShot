@@ -1,6 +1,5 @@
 # This is just a quick script for reading .ser movie files.
-
-%pylab
+import numpy as np
 import struct
 
 def readheader(filename):
@@ -46,12 +45,4 @@ def readframe(filename,frame,header=False):
         img = np.array(struct.unpack(fmt,f.read(ImageBytes))).reshape(ImageHeight,ImageWidth)
 
     return img, header
-
-# Change this filename to suit your needs...
-filename = './uranus20141002-1511.ser'
-
-print 'Image size is: '+str(ImageWidth)+'x'+str(ImageHeight)
-print 'Frame count: '+str(FrameCount)
-
-plt.imshow(img)
 
