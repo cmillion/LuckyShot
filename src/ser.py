@@ -52,7 +52,4 @@ def readframe(filename,frame,header=False):
         img = np.array(struct.unpack(fmt,f.read(ImageBytes))).reshape(
                                     header['ImageHeight'],header['ImageWidth'])
 
-    if not header:
-        return img, header
-    else:
         return img
