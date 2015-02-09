@@ -19,8 +19,8 @@ def find_cob(img,verbose=1):
     xfit = np.polyfit(np.arange(xc-10,xc+10),xhist_r,2)
     yfit = np.polyfit(np.arange(yc-10,yc+10),yhist_r,2)
     # Find the root of the first derivative (i.e. the peak)
-    w = np.poly1d(xfit).deriv().r
-    h = np.poly1d(yfit).deriv().r
+    w = np.poly1d(xfit).deriv().r[0]
+    h = np.poly1d(yfit).deriv().r[0]
     if verbose>1:
         print 'CoB at [{w},{h}].'.format(w=w,h=h)
     return w,h
